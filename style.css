@@ -1,3 +1,5 @@
 body { font-family: Arial; text-align: center; background: #f4f4f9; }
 .grid { display: grid; grid-template-columns: repeat(5, 60px); gap: 6px; justify-content: center; margin-top: 15px; }
 .cell { background: #fff; height: 40px; border: 2px solid #ccc; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 4px; }
+.called { background: #4CAF50; color: #fff; }
+button { padding: 8px 16px; font-size: 15px; cursor: pointer; }
