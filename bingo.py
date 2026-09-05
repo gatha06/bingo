@@ -2,6 +2,15 @@ import random
 import time
 
 
+def validate_board(numbers):
+  if len(numbers) != 25:
+    raise ValueError("Enter exactly 25 numbers.")
+  if any(number < 1 or number > 25 for number in numbers):
+    raise ValueError("Every number must be between 1 and 25.")
+  if len(set(numbers)) != 25:
+    raise ValueError("Each number must be used only once.")
+
+
 def get_board():
   print("Welcome to Python Text Bingo!")
   print("Enter 25 different numbers from 1 to 25.")
@@ -56,26 +65,48 @@ def has_bingo(board, called_numbers):
   return any(all(number in called_numbers for number in line) for line in lines)
 
 
-board = get_board()
-if board is None:
-  print("Thanks for playing!")
-else:
-  called_numbers = set()
-  numbers_to_call = list(range(1, 26))
-  random.shuffle(numbers_to_call)
+class BingoGame:
+  def __init__(self, board):
+    validate_board(board)
+    self.board = board
+    self.called_numbers = set()
+    self.numbers_to_call = list(range(1, 26))
+    random.shuffle(self.numbers_to_call)
 
-  while numbers_to_call:
-    show_board(board, called_numbers)
-    next_number = numbers_to_call.pop()
-    called_numbers.add(next_number)
-    print(f"\nLatest called number: {next_number}")
+  def call_number(self):
+    if not self.numbers_to_call:
+      return None
+    number = self.numbers_to_call.pop()
+    self.called_numbers.add(number)
+    return number
 
-    if has_bingo(board, called_numbers):
-      show_board(board, called_numbers)
-      print("BINGO!")
-      break
+  def state(self, latest=None):
+    return {
+      "board": self.board,
+      "called": list(self.called_numbers),
+      "latest": latest,
+      "bingo": has_bingo(self.board, self.called_numbers),
+      "finished": not self.numbers_to_call,
+    }
 
-    time.sleep(1)
+
+if __name__ == "__main__":
+  board = get_board()
+  if board is None:
+    print("Thanks for playing!")
   else:
-    show_board(board, called_numbers)
-    print("All numbers have been called!")
+    game = BingoGame(board)
+    while game.numbers_to_call:
+      show_board(game.board, game.called_numbers)
+      next_number = game.call_number()
+      print(f"\nLatest called number: {next_number}")
+
+      if has_bingo(game.board, game.called_numbers):
+        show_board(game.board, game.called_numbers)
+        print("BINGO!")
+        break
+
+      time.sleep(1)
+    else:
+      show_board(game.board, game.called_numbers)
+      print("All numbers have been called!")

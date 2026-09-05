@@ -6,8 +6,14 @@
 </head>
 <body>
     <h1>Bingo</h1>
+    <p>Enter all numbers from 1 to 25 in the order you want them on your card.</p>
+    <form id="setup-form">
+        <input id="board-input" type="text" placeholder="1 2 3 ... 25" required>
+        <button type="submit">Start Game</button>
+    </form>
+    <p id="message"></p>
     <h3 id="latest">Called: None</h3>
-    <button onclick="callNumber()">Call Number</button>
+    <button id="call-button" type="button" disabled>Call Number</button>
     <div class="grid" id="board"></div>
     <script src="script.js"></script>
 </body>
